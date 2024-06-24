@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/admin/admin_home.dart';
+import 'package:flutter_application_1/provider/test_provider.dart';
+import 'package:flutter_application_1/provider/user_provider.dart';
+import 'package:provider/provider.dart';
 
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => TestProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
