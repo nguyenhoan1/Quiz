@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/admin/manage_answers.dart';
-import 'package:flutter_application_1/admin/manage_questions.dart';
+import 'package:flutter_application_1/admin/manage_qna.dart';
 import 'package:flutter_application_1/admin/manage_tests.dart';
+import 'package:flutter_application_1/provider/quiz_provider.dart';
+import 'package:provider/provider.dart';
 
 class AdminTabsPage extends StatefulWidget {
   @override
@@ -14,7 +15,10 @@ class _AdminTabsPageState extends State<AdminTabsPage> with SingleTickerProvider
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<QuizProvider>(context, listen: false).fetchQuizData();
+    });
   }
 
   @override
@@ -35,8 +39,7 @@ class _AdminTabsPageState extends State<AdminTabsPage> with SingleTickerProvider
           indicatorWeight: 4.0,
           tabs: [
             Tab(text: 'Manage Tests'),
-            Tab(text: 'Manage Questions'),
-            Tab(text: 'Manage Answers'),
+            Tab(text: 'Manage Q&A'),
           ],
         ),
       ),
@@ -44,8 +47,7 @@ class _AdminTabsPageState extends State<AdminTabsPage> with SingleTickerProvider
         controller: _tabController,
         children: [
           ManageTestsPage(),
-          ManageQuestionsPage(),
-          ManageAnswersPage(),
+          ManageQnAPage(),
         ],
       ),
     );

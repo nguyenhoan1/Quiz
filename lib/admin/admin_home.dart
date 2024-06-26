@@ -66,39 +66,42 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   Widget _buildCard(BuildContext context, String title, IconData icon, Color color, Widget page) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      elevation: 6,
-      shadowColor: color.withOpacity(0.5),
-      child: InkWell(
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircleAvatar(
-                backgroundColor: color,
-                child: Icon(icon, size: 40, color: Colors.white),
-                radius: 30,
-              ),
-              SizedBox(height: 10),
-              Flexible(
-                child: Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: color,
-                  ),
+  return Card(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(20),
+    ),
+    elevation: 6,
+    shadowColor: color.withOpacity(0.5),
+    child: InkWell(
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => page));
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircleAvatar(
+              backgroundColor: color,
+              child: Icon(icon, size: 40, color: Colors.white),
+              radius: 30,
+            ),
+            SizedBox(height: 10),
+            Flexible(
+              child: Text(
+                title,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: color,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

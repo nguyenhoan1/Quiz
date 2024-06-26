@@ -1,28 +1,25 @@
+import 'question.dart';
+
 class Quiz {
   int id;
-  String? name;
-  String? note;
+  String name;
+  List<Question> questions;
 
   Quiz({
     required this.id,
     required this.name,
-    required this.note,
-    // required this.image
+    required this.questions,
   });
 
   factory Quiz.fromJson(Map<String, dynamic> json) {
     return Quiz(
-    id: json['id'],
-    name: json['name'],
-    note: json['note']
-    // image: json['image']
+      id: json['id'] ?? 0,
+      name: json['name'] ?? '',
+      questions: json['questions'] != null
+          ? (json['questions'] as List)
+              .map((question) => Question.fromJson(question))
+              .toList()
+          : [],
     );
-  }
- Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'note': note,
-    };
   }
 }

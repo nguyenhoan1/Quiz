@@ -11,6 +11,8 @@ class Question {
   final List<Answer> answers;
 
   Question({required this.id, required this.question, required this.answers});
+
+  static fromJson(param0) {}
 }
 
 class Test {

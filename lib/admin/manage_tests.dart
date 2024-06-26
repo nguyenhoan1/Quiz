@@ -1,49 +1,72 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/provider/quiz_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_application_1/component/bulletlist.dart';
-import 'package:flutter_application_1/model/test.dart';
-import 'package:flutter_application_1/provider/test_provider.dart';
 
-class ManageTestsPage extends StatelessWidget {
+class ManageTestsPage extends StatefulWidget {
+  @override
+  _ManageTestsPageState createState() => _ManageTestsPageState();
+}
+
+class _ManageTestsPageState extends State<ManageTestsPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<QuizProvider>(context, listen: false).fetchQuizzes();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Manage Tests'),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.cyan,
       ),
-      body: Consumer<TestProvider>(
-        builder: (context, testProvider, child) {
-          if (testProvider.tests.isEmpty) {
+      body: Consumer<QuizProvider>(
+        builder: (context, quizProvider, child) {
+          if (quizProvider.isLoading) {
             return Center(child: CircularProgressIndicator());
           }
+          if (quizProvider.quizzes.isEmpty) {
+            return Center(child: Text('No tests found.'));
+          }
           return ListView.builder(
-            primary: false, // Disable primary scroll controller
-            itemCount: testProvider.tests.length,
+            itemCount: quizProvider.quizzes.length,
             itemBuilder: (context, index) {
-              final test = testProvider.tests[index];
-              return ExpansionTile(
-                title: Text(test.title),
-                subtitle: Text(test.description),
-                children: _buildQuestions(test.questions),
+              final quiz = quizProvider.quizzes[index];
+              return Card(
+                margin: EdgeInsets.all(10.0),
+                child: ExpansionTile(
+                  title: Text(
+                    quiz.name,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  children: quiz.questions.map((question) {
+                    return ExpansionTile(
+                      title: Text(
+                        question.content,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      children: question.answers.map((answer) {
+                        return ListTile(
+                          title: Text('Answer: ${answer.content}'),
+                        );
+                      }).toList(),
+                    );
+                  }).toList(),
+                ),
               );
             },
           );
         },
       ),
     );
-  }
-
-  List<Widget> _buildQuestions(List<Question> questions) {
-    return questions.map((q) {
-      return ListTile(
-        title: Text(q.question),
-        subtitle: BulletList(items: q.answers.map((a) => a.text).toList()),
-        trailing: Icon(Icons.edit),
-        onTap: () {
-          // Handle edit action
-        },
-      );
-    }).toList();
   }
 }
